@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wypożyczenia</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Wypożyczenia</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+    
+    <h3>Lista Wypożyczeń</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Czytelnik</th><th>Wolumen ID</th><th>Data Wyp.</th><th>Zwrócono?</th></tr>
+        <tr th:each="w : ${wypozyczenia}">
+            <td th:text="${w.indeksWypozyczenia}">1</td>
+            <td th:text="${w.czytelnicy.nazwa} + ' (ID: ' + ${w.czytelnicy.indeksCzytelnicy} + ')'">Jan (ID: 1)</td>
+            <td th:text="${w.wolumen.indeksWolumen}">1</td>
+            <td th:text="${w.dataPoczatkowa}">2026-06-14</td>
+            <td th:text="${w.dataZwrotu != null ? 'Zwrócono' : 'W TRAKCIE'}">W TRAKCIE</td>
+        </tr>
+    </table>
+
+    <hr>
+    <h3>Wypożycz Książkę</h3>
+    <form action="/wypozyczenia/wypozycz" method="post">
+        <input type="number" name="indeksCzytelnicy" placeholder="ID Czytelnika" required>
+        <input type="number" name="indeksWolumen" placeholder="ID Wolumenu" required>
+        <button type="submit">Wypożycz</button>
+    </form>
+
+    <hr>
+    <h3>Zwróć Książkę</h3>
+    <form action="/wypozyczenia/zwroc" method="post">
+        <input type="number" name="id" placeholder="ID Wypożyczenia" required>
+        <button type="submit">Zwróć</button>
+    </form>
+</body>
+</html>

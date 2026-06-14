@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Katalog</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Katalog</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+    
+    <h3>Lista Kategorii</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Nazwa</th></tr>
+        <tr th:each="k : ${kategorie}">
+            <td th:text="${k.indeksKategoria}">1</td>
+            <td th:text="${k.nazwa}">Fantastyka</td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/kategorie" method="post">
+        <input type="text" name="nazwa" placeholder="Nowa kategoria" required>
+        <button type="submit">Dodaj Kategorię</button>
+    </form>
+    
+    <hr>
+    <h3>Lista Tytułów</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Tytuł</th><th>Autor</th><th>Kategoria (ID)</th></tr>
+        <tr th:each="t : ${tytuly}">
+            <td th:text="${t.indeksTytul}">1</td>
+            <td th:text="${t.tytul}">Wiedźmin</td>
+            <td th:text="${t.autor}">Sapkowski</td>
+            <td th:text="${t.kategoria.nazwa} + ' (' + ${t.kategoria.indeksKategoria} + ')'">Fantastyka (1)</td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/tytuly" method="post">
+        <input type="text" name="tytul" placeholder="Tytuł" required>
+        <input type="text" name="autor" placeholder="Autor" required>
+        <input type="text" name="dataWydania" placeholder="Data (YYYY-MM-DD)" required>
+        <input type="number" name="kategoriaId" placeholder="ID Kategorii" required>
+        <button type="submit">Dodaj Tytuł</button>
+    </form>
+
+    <hr>
+    <h3>Lista Wolumenów</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID Wolumenu</th><th>Tytuł (ID)</th><th>Wypożyczony?</th></tr>
+        <tr th:each="w : ${wolumeny}">
+            <td th:text="${w.indeksWolumen}">1</td>
+            <td th:text="${w.tytul.tytul} + ' (' + ${w.tytul.indeksTytul} + ')'">Wiedźmin (1)</td>
+            <td th:text="${w.statusWypozyczenia ? 'Tak' : 'Nie'}">Nie</td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/wolumeny" method="post">
+        <input type="number" name="tytulId" placeholder="ID Tytułu" required>
+        <button type="submit">Dodaj Wolumen</button>
+    </form>
+</body>
+</html>

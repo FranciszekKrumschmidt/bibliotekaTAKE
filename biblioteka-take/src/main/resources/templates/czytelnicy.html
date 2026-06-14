@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Czytelnicy</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Czytelnicy</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+    
+    <h3>Lista Czytelników</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię i nazwisko</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="czytelnik : ${czytelnicy}">
+                <td th:text="${czytelnik.indeksCzytelnicy}">1</td>
+                <td th:text="${czytelnik.nazwa}">Jan</td>
+                <td th:text="${czytelnik.email}">jan@test.pl</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+    <h3>Dodaj Czytelnika</h3>
+    <form action="/czytelnicy" method="post">
+        <label>Imię i nazwisko:</label>
+        <input type="text" name="nazwa" required><br><br>
+        <label>Email:</label>
+        <input type="email" name="email" required><br><br>
+        <button type="submit">Zarejestruj</button>
+    </form>
+</body>
+</html>
