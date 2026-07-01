@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja Tytułu</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Edycja Tytułu</h1>
+    <a href="/katalog">Powrót do katalogu</a>
+    <hr>
+    <form action="/katalog/tytuly/edytuj" method="post">
+        <input type="hidden" name="id" th:value="${tytul.indeksTytul}">
+        
+        <label>Tytuł:</label>
+        <input type="text" name="tytul" th:value="${tytul.tytul}" required maxlength="50"><br><br>
+        
+        <label>Autor:</label>
+        <input type="text" name="autor" th:value="${tytul.autor}" required maxlength="50"><br><br>
+        
+        <label>Data Wydania:</label>
+        <input type="date" name="dataWydania" th:value="${#temporals.format(tytul.dataWydania, 'yyyy-MM-dd')}" required><br><br>
+        
+        <label>Kategoria:</label>
+        <select name="kategoriaId" required>
+            <option th:each="k : ${kategorie}" 
+                    th:value="${k.indeksKategoria}" 
+                    th:text="${k.nazwa}"
+                    th:selected="${k.indeksKategoria == tytul.kategoria.indeksKategoria}">
+            </option>
+        </select><br><br>
+        
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+</body>
+</html>

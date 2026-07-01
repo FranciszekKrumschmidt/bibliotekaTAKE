@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wypożyczenia</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Wypożyczenia</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+
+    <div th:if="${error}" style="color:white; background-color:red; font-weight:bold; border:1px solid darkred; padding:10px; margin-bottom:10px;" th:text="${error}"></div>
+    <div th:if="${success}" style="color:white; background-color:green; font-weight:bold; border:1px solid darkgreen; padding:10px; margin-bottom:10px;" th:text="${success}"></div>
+
+    <h3>Lista Wypożyczeń</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Czytelnik</th><th>Wolumen ID</th><th>Data Wyp.</th><th>Zwrócono?</th><th>Akcje</th></tr>
+        <tr th:each="w : ${wypozyczenia}">
+            <td th:text="${w.indeksWypozyczenia}"></td>
+            <td th:text="${w.czytelnicy.nazwa} + ' (ID: ' + ${w.czytelnicy.indeksCzytelnicy} + ')'"></td>
+            <td th:text="${w.wolumen.indeksWolumen}"></td>
+            <td th:text="${w.dataPoczatkowa}"></td>
+            <td th:text="${w.dataZwrotu != null ? 'Zwrócono' : 'W TRAKCIE'}"></td>
+            <td>
+                <form action="/wypozyczenia/usun" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${w.indeksWypozyczenia}">
+                    <button type="submit">Usuń</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+    <h3>Wypożycz Książkę</h3>
+    <form action="/wypozyczenia/wypozycz" method="post">
+        <label>Czytelnik:</label>
+        <select name="indeksCzytelnicy" required>
+            <option th:each="c : ${czytelnicy}" th:value="${c.indeksCzytelnicy}" th:text="${c.nazwa} + ' (ID: ' + ${c.indeksCzytelnicy} + ')'"></option>
+        </select><br><br>
+        
+        <label>Wolumen (tylko wolne):</label>
+        <select name="indeksWolumen" required>
+            <option th:each="w : ${wolumeny}" th:if="${!w.statusWypozyczenia}" th:value="${w.indeksWolumen}" th:text="${w.tytul.tytul} + ' (Wolumen ID: ' + ${w.indeksWolumen} + ')'"></option>
+        </select><br><br>
+        
+        <button type="submit">Wypożycz</button>
+    </form>
+
+    <hr>
+    <h3>Zwróć Książkę</h3>
+    <form action="/wypozyczenia/zwroc" method="post">
+        <label>Zwracane wypożyczenie:</label>
+        <select name="id" required>
+            <option th:each="wyp : ${wypozyczenia}" th:if="${wyp.dataZwrotu == null}" th:value="${wyp.indeksWypozyczenia}" th:text="'Wypożyczenie ID: ' + ${wyp.indeksWypozyczenia} + ' - ' + ${wyp.wolumen.tytul.tytul} + ' (' + ${wyp.czytelnicy.nazwa} + ')'"></option>
+        </select><br><br>
+        
+        <button type="submit">Zwróć</button>
+    </form>
+</body>
+</html>

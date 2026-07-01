@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja Czytelnika</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Edycja Czytelnika</h1>
+    <a href="/czytelnicy">Powrót do czytelników</a>
+    <hr>
+    <form action="/czytelnicy/edytuj" method="post">
+        <input type="hidden" name="id" th:value="${czytelnik.indeksCzytelnicy}">
+        <label>Imię i nazwisko:</label>
+        <input type="text" name="nazwa" th:value="${czytelnik.nazwa}" required maxlength="50"><br><br>
+        <label>Email:</label>
+        <input type="email" name="email" th:value="${czytelnik.email}" required maxlength="50"><br><br>
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Katalog</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Katalog</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+
+    <div th:if="${error}" style="color:white; background-color:red; font-weight:bold; border:1px solid darkred; padding:10px; margin-bottom:10px;" th:text="${error}"></div>
+    <div th:if="${success}" style="color:white; background-color:green; font-weight:bold; border:1px solid darkgreen; padding:10px; margin-bottom:10px;" th:text="${success}"></div>
+
+    <h3>Lista Kategorii</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Nazwa</th><th>Akcje</th></tr>
+        <tr th:each="k : ${kategorie}">
+            <td th:text="${k.indeksKategoria}"></td>
+            <td th:text="${k.nazwa}"></td>
+            <td>
+                <a th:href="@{/katalog/kategorie/edytuj(id=${k.indeksKategoria})}">Edytuj</a> |
+                <form action="/katalog/kategorie/usun" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${k.indeksKategoria}">
+                    <button type="submit">Usuń</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/kategorie" method="post">
+        <input type="text" name="nazwa" placeholder="Nowa kategoria" required maxlength="50">
+        <button type="submit">Dodaj Kategorię</button>
+    </form>
+    
+    <hr>
+    <h3>Lista Tytułów</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Tytuł</th><th>Autor</th><th>Kategoria (ID)</th><th>Akcje</th></tr>
+        <tr th:each="t : ${tytuly}">
+            <td th:text="${t.indeksTytul}"></td>
+            <td th:text="${t.tytul}"></td>
+            <td th:text="${t.autor}"></td>
+            <td th:text="${t.kategoria.nazwa} + ' (' + ${t.kategoria.indeksKategoria} + ')'"></td>
+            <td>
+                <a th:href="@{/katalog/tytuly/edytuj(id=${t.indeksTytul})}">Edytuj</a> |
+                <form action="/katalog/tytuly/usun" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${t.indeksTytul}">
+                    <button type="submit">Usuń</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/tytuly" method="post">
+        <label>Tytuł:</label>
+        <input type="text" name="tytul" required maxlength="50"><br><br>
+        
+        <label>Autor:</label>
+        <input type="text" name="autor" required maxlength="50"><br><br>
+        
+        <label>Data Wydania:</label>
+        <input type="date" name="dataWydania" required><br><br>
+        
+        <label>Kategoria:</label>
+        <select name="kategoriaId" required>
+            <option th:each="k : ${kategorie}" th:value="${k.indeksKategoria}" th:text="${k.nazwa}"></option>
+        </select><br><br>
+        
+        <button type="submit">Dodaj Tytuł</button>
+    </form>
+
+    <hr>
+    <h3>Lista Wolumenów</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID Wolumenu</th><th>Tytuł (ID)</th><th>Wypożyczony?</th><th>Akcje</th></tr>
+        <tr th:each="w : ${wolumeny}">
+            <td th:text="${w.indeksWolumen}">1</td>
+            <td th:text="${w.tytul.tytul} + ' (' + ${w.tytul.indeksTytul} + ')'">Wiedźmin (1)</td>
+            <td th:text="${w.statusWypozyczenia ? 'Tak' : 'Nie'}">Nie</td>
+            <td>
+                <form action="/katalog/wolumeny/usun" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${w.indeksWolumen}">
+                    <button type="submit">Usuń</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <form action="/katalog/wolumeny" method="post">
+        <label>Tytuł:</label>
+        <select name="tytulId" required>
+            <option th:each="t : ${tytuly}" th:value="${t.indeksTytul}" th:text="${t.tytul} + ' (' + ${t.autor} + ')'"></option>
+        </select><br><br>
+        <button type="submit">Dodaj Wolumen</button>
+    </form>
+</body>
+</html>

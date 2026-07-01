@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Czytelnicy</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+    <h1>Czytelnicy</h1>
+    <a href="/">Powrót na stronę główną</a>
+    <hr>
+    
+    <div th:if="${error}" style="color:white; background-color:red; font-weight:bold; border:1px solid darkred; padding:10px; margin-bottom:10px;" th:text="${error}"></div>
+    <div th:if="${success}" style="color:white; background-color:green; font-weight:bold; border:1px solid darkgreen; padding:10px; margin-bottom:10px;" th:text="${success}"></div>
+
+    <h3>Lista Czytelników</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię i nazwisko</th>
+                <th>Email</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="czytelnik : ${czytelnicy}">
+                <td th:text="${czytelnik.indeksCzytelnicy}"></td>
+                <td th:text="${czytelnik.nazwa}"></td>
+                <td th:text="${czytelnik.email}"></td>
+                <td>
+                    <a th:href="@{/czytelnicy/edytuj(id=${czytelnik.indeksCzytelnicy})}">Edytuj</a> |
+                    <form action="/czytelnicy/usun" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${czytelnik.indeksCzytelnicy}">
+                        <button type="submit">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+    <h3>Dodaj Czytelnika</h3>
+    <form action="/czytelnicy" method="post">
+        <label>Imię i nazwisko(pseudonim):</label>
+        <input type="text" name="nazwa" required maxlength="50"><br><br>
+        <label>Email:</label>
+        <input type="email" name="email" required maxlength="50"><br><br>
+        <button type="submit">Zarejestruj</button>
+    </form>
+</body>
+</html>
